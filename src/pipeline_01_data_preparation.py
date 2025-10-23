@@ -3,19 +3,31 @@ import argparse
 import yaml # where we define our configurations
 import logging #
 
+# function to read configuration from a yaml file
+def read_params(config_path):
+    with open(config_path) as config_file:
+        config = yaml.safe_load(config_file)
+    return config
+
+def main(config_path, datasource):
+    config = read_params(config_path)
+    print(f"Configuration: {config}")
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser()
     # args.add_argument("--config", "-c", default="configs/config.yaml") # want to run from command line the config file
     # default points to config file path. if we want to run this script from command line we can provide default.
     
-    args.add_argument("--config",  default="default")
+    # Using os to join file paths to omit / or \ issues across different OS
+    default_config_path = os.path.join("config", "params.yaml")
+
+    args.add_argument("--config",  default=default_config_path)
     args.add_argument("--datasource", default=None)
 
     # Parses command-line arguments and stores them in 'parsed_args' as object attributes
     parsed_args = args.parse_args()
 
-    print(parsed_args.config, parsed_args.datasource)
+    main(config_path=parsed_args.config, datasource=parsed_args.datasource)
 
     # # read the config file
     # with open(parsed_args.config) as config_file:
